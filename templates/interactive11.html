@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+//window.onload = function() {
+$(function() {
+			 
+var dataPoints = [];
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2",
+	title: {
+		text: "Weather Forecast"
+	},
+	axisY: {
+		title: "Units",
+		titleFontSize: 24
+	},
+	data: [{
+		type: "column",
+		yValueFormatString: "#,### Units",
+		dataPoints: dataPoints
+	}]
+});
+
+$('a#process_input').bind('click', function() {
+				$.getJSON('/back_pro', {
+				  date_: $('input[name="date_"]').val(),function(data) {
+	for (var i = 0; i < data.length; i++) {
+		dataPoints.push({
+			x: new Date(data[i].date),
+			y: data[i].units
+		});
+              
+	}
+	chart.render();
+}
+});
+});
+
+});
+
+//$.getJSON("https://canvasjs.com/data/gallery/javascript/daily-sales-data.json", addData);
+
+
+</script>
+</head>
+<body>
+                <div class='container'>
+                <h3>Welcome! Enter date in YYYYMMDD format only</h3>
+                        <form>
+                                <input type=text size=5 name=date_>
+                                <a href=# id=process_input><button class='btn btn-default'>Submit</button></a>
+                        </form>
+                
+                </div>
+<div id="chartContainer" ></div>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

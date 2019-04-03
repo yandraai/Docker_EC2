@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+               <script type=text/javascript>
+
+           
+
+    $(document).ready(function() {
+                          $('a#process_input').bind('click', function() {
+                                $.getJSON('/back_pro', {
+                                  date_: $('input[name="date_"]').val(),
+                                }, function(data) {
+                                    var dataPoints1 = [];
+                                    var dataPoints= [];
+                                    var dataPoints2 = [];
+                                    var $ul = $('#result');
+                                    var options =  {
+	animationEnabled: true,
+	theme: "dark2",
+	title: {
+		text: "Weather Forecast for 5 Days"
+	},
+	axisX: {
+		//valueFormatString: "########",
+               title:"Date",
+               interval:1, 
+        intervalType: "day"  
+	},
+	axisY: {
+		title: "Temperatures Recorded",
+		titleFontSize: 24,
+		includeZero: false,
+               gridThickness:0
+	},
+       	toolTip:{
+		shared:true
+	},
+       	legend:{
+		cursor:"pointer",
+		verticalAlign: "bottom",
+		horizontalAlign: "left",
+		dockInsidePlotArea: true,
+	
+	}, 
+	data: [{
+		type: "spline", 
+		name: "TMAX",
+                 showInLegend: true,
+                 dataPoints:dataPoints1,
+                color:"#FFFFFF"
+                       
+	//	dataPoints1: [//array
+        //{ x: new Date(2012, 01, 1), y: 26},
+        //{ x: new Date(2012, 01, 3), y: 38},
+       // { x: new Date(2012, 01, 5), y: 43},
+        //{ x: new Date(2012, 01, 7), y: 29},
+        
+	},
+        {
+         type:"spline",
+         showInLegend: true,
+         name: "TMIN",  
+         dataPoints:dataPoints2,
+         markerType: "square"       
+         }
+
+
+]
+};
+  // for (var i = 0; i < data.length; i++)                               
+ $.each(data.result, function(idx, item){
+				  //$("#result").text(data.result);
+                                  var a=item['DATE'];
+                                   var b = [a.slice(0, 4), ",", a.slice(4, 6), ",", a.slice(6, 8)].join('');
+                                     dataPoints1.push({
+                                              x:new Date(b),
+                                              y:parseFloat(item['TMAX'])
+                                        });
+                                      dataPoints2.push({
+                                              x:new Date(b),
+                                              y:parseFloat(item['TMIN'])
+                                        });
+
+
+
+                                       $ul.append('<li style= "DATE: >' +item['DATE']+ ' -'+console.log(b)+'</li>');
+                                     // $ul.append('<li style= "DATE: ' + item[0] + '">' +console.log(dataPoints1)+item['DATE']+ ' - ' + item.TMAX + '-' + item['TMIN'] +'</li>')
+                                      //$ul.append('<li> ' +data.result[i]['DATE']+ ' - ' + data.result[i].TMAX + '-' + data.result[i]['TMIN'] +'</li>')
+				})
+                                  // $ul.append('<li style= "DATE: ' + item[0] + '">' +console.log(dataPoints1)+item['DATE']+ ' - ' + item.TMAX + '-' + item['TMIN'] +'</li>')
+                                              dataPoints.push({
+                                              x:data['DATE'],
+                                              y:data['TMAX']
+                                        });
+                               //$ul.append('<li style= "DATE: ' +  + '">' +console.log(b)+console.log(dataPoints1)+data.result['DATE']+ ' - ' + result.TMAX + '-' + data['TMIN'] +'</li>')
+                               
+                                $("#chartContainer").CanvasJSChart(options);
+				});
+                                 
+				return false;
+			  });
+});
+			
+		</script>
+	</head>
+  
+	<body>
+		<div class='container'>
+		<h3>Welcome! Enter date in YYYYMMDD format only</h3>
+			<form>
+				<input type=text size=5 name=date_>
+				<a href=# id=process_input><button class='btn btn-default'>Submit</button></a>
+			</form>
+             	<br></br>     
+                   <div id="chartContainer" ></div>
+</div>
+	                               
+</body>
+</html>
