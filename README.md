@@ -1,4 +1,4 @@
-Cloud_Project01
+Cloud Project
 ===================
 
 Problem Statement
